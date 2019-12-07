@@ -1,0 +1,12 @@
+src
+/src/
+src/
+__mocks__
+/__mocks__/
+test
+*.log
+tsconfig.json
+webpack.config.js
+.babelrc
+.gitignore
+node_modules
