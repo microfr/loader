@@ -70,6 +70,7 @@
   },
   "dependencies": {
     "@microfr/error-boundary": "^1.0.0",
-    "@microfr/use-script": "^1.0.1"
+    "@microfr/use-script": "^1.0.1",
+    "apollo-link-context": "^1.0.19"
   }
 }

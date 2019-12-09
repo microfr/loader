@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import ApolloClient, { gql } from "apollo-boost";
+import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ErrorBoundary from "@microfr/error-boundary";
 import Loader from "./Loader";
@@ -19,7 +19,10 @@ const _LoaderWrapper: React.FunctionComponent<Props> = ({ uri, ...props }) => {
 
   useEffect(() => {
     const newClient = new ApolloClient({
-      uri
+      uri,
+      headers: {
+        authorization: localStorage.getItem('token')
+      }
     });
     setClient(newClient);
   }, []);
