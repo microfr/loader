@@ -7,7 +7,7 @@ interface Props {
   src: string;
 }
 
-const _ScriptInjector: React.FunctionComponent<Props> = ({ src, namespace }) => {
+const _ScriptInjector: React.FunctionComponent<Props> = ({ src, namespace, ...props }) => {
   const [Component, setComponent] = useState<React.FunctionComponent | null>(
     null
   );
@@ -22,7 +22,7 @@ const _ScriptInjector: React.FunctionComponent<Props> = ({ src, namespace }) => 
     }
   }, [component]);
   // @ts-ignore
-  return Component ? <Component /> : <div>Loading</div>;
+  return Component ? <Component {...props } /> : <div>Loading</div>;
 };
 _ScriptInjector.displayName = "ScriptInjector";
 
