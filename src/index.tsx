@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ErrorBoundary from "@microfr/error-boundary";
 import Loader from "./Loader";
+import { ErrorResponse } from "apollo-link-error";
 
 interface Props {
   token?: string;
@@ -16,20 +16,26 @@ interface Props {
 
 const _LoaderWrapper: React.FunctionComponent<Props> = ({ uri, ...props }) => {
   const [client, setClient] = useState<ApolloClient<any> | null>(null);
+  const [error, setError] = useState<ErrorResponse | null>(null)
 
+  /*
+    Instantiate apollo client instance. Conects to BFF.
+  */
   useEffect(() => {
     const newClient = new ApolloClient({
       uri,
       headers: {
         authorization: localStorage.getItem('token')
-      }
+      },
+      onError: (err) => setError(err)
     });
     setClient(newClient);
   }, []);
 
   return (
     <ErrorBoundary>
-      {client && (
+      {error && <div>Could not connect to server.</div>}
+      {client && !error && (
         <ApolloProvider client={client}>
           <Loader {...props} />
         </ApolloProvider>
@@ -37,10 +43,7 @@ const _LoaderWrapper: React.FunctionComponent<Props> = ({ uri, ...props }) => {
     </ErrorBoundary>
   );
 };
-_LoaderWrapper.displayName = "LoaderWrapper";
 
-_LoaderWrapper.propTypes = {
-  token: PropTypes.string
-};
+_LoaderWrapper.displayName = "LoaderWrapper";
 
 export default React.memo(_LoaderWrapper);
