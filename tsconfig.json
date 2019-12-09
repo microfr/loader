@@ -4,8 +4,7 @@
         "esModuleInterop": true,
         "target": "es5",
         "lib": ["es6", "dom"],
-        "sourceMap": true,
-        "allowJs": true,
+        "sourceMap": false,
         "jsx": "react",
         "moduleResolution": "node",
         "rootDir": "src",
@@ -14,6 +13,7 @@
         "noImplicitAny": true,
         "strictNullChecks": true
     },
+    "typeRoots": ["./types", "./node_modules/@types"],
     "include": [
         "src/**/*.tsx"
     ],

@@ -1,6 +1,6 @@
 {
   "name": "@microfr/loader",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,6 +10,7 @@
     "test": "npx jest",
     "start": "NODE_ENV=development webpack-dev-server --mode development --open --hot",
     "build": "npx webpack --mode production",
+    "postbuild": "npx tsc --declaration --outDir dist/ --emitDeclarationOnly --declarationMap",
     "check-types": "npx tsc"
   },
   "files": [
@@ -54,7 +55,7 @@
     "scoped-css-loader": "^1.0.0",
     "style-loader": "^1.0.1",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.7.2",
+    "typescript": "3.5.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
