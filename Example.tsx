@@ -13,6 +13,6 @@ window['@apollo/react-hooks'] = fromHooks
 const NODE = document.querySelector("#app");
 
 render(
-    <Loader uri="http://localhost:8081" namespace="CreditScore"/>,
+    <Loader uri="http://localhost:8081" namespace="CreditScore" renderWhileLoading={() => "yo yo mang"}/>,
   NODE
 );

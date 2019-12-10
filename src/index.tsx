@@ -4,30 +4,27 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import ErrorBoundary from "@microfr/error-boundary";
 import Loader from "./Loader";
 import { ErrorResponse } from "apollo-link-error";
+import * as fromTypes from './types'
+import PropTypes from 'prop-types';
 
-interface Props {
-  token?: string;
-  namespace: string;
+const _LoaderWrapper: React.FunctionComponent<fromTypes.Props> = ({ uri, ...props }) => {
   /*
-  URI of GraphQL server to be passed into apollo client.
+    Sets apollo client instance.
   */
-  uri: string;
-}
-
-const _LoaderWrapper: React.FunctionComponent<Props> = ({ uri, ...props }) => {
   const [client, setClient] = useState<ApolloClient<any> | null>(null);
-  const [error, setError] = useState<ErrorResponse | null>(null)
+  const [error, setError] = useState<ErrorResponse | null>(null);
 
   /*
-    Instantiate apollo client instance. Conects to BFF.
+    Instantiate apollo client instance on load. Connects to BFF.
   */
   useEffect(() => {
     const newClient = new ApolloClient({
       uri,
       headers: {
-        authorization: localStorage.getItem('token')
+        ...props.headers,
+        authorization: localStorage.getItem("token")
       },
-      onError: (err) => setError(err)
+      onError: err => setError(err)
     });
     setClient(newClient);
   }, []);
@@ -45,5 +42,10 @@ const _LoaderWrapper: React.FunctionComponent<Props> = ({ uri, ...props }) => {
 };
 
 _LoaderWrapper.displayName = "LoaderWrapper";
+
+_LoaderWrapper.propTypes = {
+  uri: PropTypes.string.isRequired,
+  headers: PropTypes.object,
+}
 
 export default React.memo(_LoaderWrapper);

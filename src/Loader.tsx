@@ -3,11 +3,7 @@ import PropTypes from "prop-types";
 import ScriptInjector from "./ScriptInjector";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
-
-interface Props {
-  token?: string;
-  namespace: string;
-}
+import * as fromTypes from './types'
 
 const ASSET_QUERY = gql`
   query($namespace: String!) {
@@ -17,7 +13,11 @@ const ASSET_QUERY = gql`
   }
 `;
 
-const _Loader: React.FunctionComponent<Props> = ({ namespace, ...props }) => {
+const _Loader: React.FunctionComponent<Omit<fromTypes.Props, 'uri'>> = ({
+  namespace,
+  renderWhileLoading,
+  ...props
+}) => {
   const [src, setSrc] = useState<string>("");
 
   const { loading } = useQuery(ASSET_QUERY, {
@@ -28,19 +28,31 @@ const _Loader: React.FunctionComponent<Props> = ({ namespace, ...props }) => {
       if (asset) {
         setSrc(asset.src);
       }
+    },
+    onError: err => {
+      throw err;
     }
   });
 
+  /*
+    Handle what to render while script is being laoded.
+  */
+  const whileLoading =
+    typeof renderWhileLoading === "function" ? (
+      renderWhileLoading()
+    ) : (
+      <div>Loading Component</div>
+    );
+
   return (
-    <React.Suspense fallback={<div>loading component</div>}>
-      {!loading && src && <ScriptInjector src={src} namespace={namespace} {...props}/>}
+    <React.Suspense fallback={() => whileLoading()}>
+      {!loading && src && (
+        <ScriptInjector src={src} namespace={namespace} {...props} />
+      )}
     </React.Suspense>
   );
 };
-_Loader.displayName = "Loader";
 
-_Loader.propTypes = {
-  token: PropTypes.string
-};
+_Loader.displayName = "Loader";
 
 export default React.memo(_Loader);
